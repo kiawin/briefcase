@@ -19,7 +19,7 @@ def build_command(tmp_path):
 def test_build_app(build_command, first_app_with_binaries):
     "A macOS App is adhoc signed as part of the build process"
     # Build the app
-    build_command.build_app(first_app_with_binaries)
+    build_command.build_app(first_app_with_binaries, sign_app=True)
 
     # A request has been made to sign the app
     build_command.sign_app.assert_called_once_with(
@@ -34,3 +34,12 @@ def test_build_app(build_command, first_app_with_binaries):
     # This ignores the calls that would have been made transitively
     # by calling sign_app()
     build_command.sign_file.assert_not_called()
+
+
+def test_build_app_without_signing(build_command, first_app_with_binaries):
+    "A macOS App is not signed as part of the build process"
+    # Build the app
+    build_command.build_app(first_app_with_binaries, sign_app=False)
+
+    # No request has been made to sign the app
+    build_command.sign_app.assert_not_called()

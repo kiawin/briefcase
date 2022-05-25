@@ -69,12 +69,16 @@ class macOSAppUpdateCommand(macOSAppMixin, UpdateCommand):
 class macOSAppBuildCommand(macOSAppMixin, macOSSigningMixin, BuildCommand):
     description = "Build a macOS app."
 
-    def build_app(self, app: BaseConfig, **kwargs):
+    def build_app(self, app: BaseConfig, sign_app: bool = False, **kwargs):
         """
         Build the macOS app.
 
         :param app: The application to build
+        :param sign_app: The flag to indicate the sign app action
         """
+        if not sign_app:
+            return
+
         # macOS apps don't have anything to compile, but they do need to be
         # signed to be able to execute on M1 hardware - even if it's only an
         # adhoc signing identity. Apply an adhoc signing identity to the
